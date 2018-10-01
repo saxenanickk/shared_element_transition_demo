@@ -1,0 +1,3 @@
+rootProject.name = 'shared_element_transition_demo'
+
+include ':app'
