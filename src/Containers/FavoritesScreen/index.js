@@ -57,16 +57,13 @@ class FavoritesScreen extends React.Component {
 				this.symbols.push(this.props.favorites[i].symbol);
 				i++;
 			}
-			this.props.dispatch(
-				getQuote({
-					symbols: this.symbols
-				})
-			);
+			this.props.getQuote({
+				symbols: this.symbols
+			});
 		}
 	}
 
 	shouldComponentUpdate(props, state) {
-		console.log(props);
 		if (props.favorites.length > this.props.favorites.length) {
 			this.symbols = [];
 			let i = 0;
@@ -74,14 +71,20 @@ class FavoritesScreen extends React.Component {
 				this.symbols.push(props.favorites[i].symbol);
 				i++;
 			}
-			this.props.dispatch(
-				getQuote({
-					symbols: this.symbols
-				})
-			);
+			this.props.getQuote({
+				symbols: this.symbols
+			});
+		}
+		if (
+			props.quote !== null &&
+			(this.props.quote === null ||
+				Object.keys(props.quote).length !==
+					Object.keys(this.props.quote).length)
+		) {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 		}
 		if (props.news.length !== this.props.news.length) {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 		}
 		return true;
 	}
@@ -133,7 +136,7 @@ class FavoritesScreen extends React.Component {
 				}
 			);
 		});
-		this.props.dispatch(getNews({ symbol: symbol }));
+		this.props.getNews({ symbol: symbol });
 	};
 
 	closeCard = () => {
@@ -161,12 +164,12 @@ class FavoritesScreen extends React.Component {
 		]).start(() => {
 			this.setState({ activeCard: null, activeSymbol: null });
 		});
-		this.props.dispatch(saveNews([]));
+		this.props.saveNews([]);
 	};
 
 	onPressRemoveFromFavorites = item => {
-		this.props.dispatch(removeFromFavorites(item));
-		this.props.dispatch(removeFromQuote(item.symbol));
+		this.props.removeFromFavorites(item);
+		this.props.removeFromQuote(item.symbol);
 	};
 
 	renderDetails = (activeCardStyle, animatedCrossOpacity) => (
@@ -327,8 +330,8 @@ class FavoritesScreen extends React.Component {
 							>{`News`}</Text>
 						)}
 						{this.props.news.length > 0 &&
-							this.props.news.map(item => (
-								<View>
+							this.props.news.map((item, index) => (
+								<View key={index}>
 									<Text
 										numberOfLines={1}
 										ellipsizeMode={"tail"}
@@ -429,6 +432,8 @@ class FavoritesScreen extends React.Component {
 			<SafeAreaView style={{ flex: 1, backgroundColor: "#232531" }}>
 				<StatusBar backgroundColor={"#232531"} barStyle={"light-content"} />
 				<FlatList
+					removeClippedSubviews
+					keyExtractor={(item, index) => index.toString()}
 					extraData={this.props.quote}
 					data={this.props.favorites}
 					renderItem={item => {
@@ -575,9 +580,15 @@ function mapStateToProps(state) {
 	};
 }
 
+const mapDispatchToProps = dispatch => ({
+	getQuote: symbol => dispatch(getQuote(symbol)),
+	getNews: symbol => dispatch(getNews(symbol)),
+	saveNews: () => dispatch(saveNews([])),
+	removeFromFavorites: item => dispatch(removeFromFavorites(item)),
+	removeFromQuote: symbol => dispatch(removeFromFavorites(symbol))
+});
+
 export default connect(
 	mapStateToProps,
-	null,
-	null,
-	{ withRef: true }
+	mapDispatchToProps
 )(FavoritesScreen);

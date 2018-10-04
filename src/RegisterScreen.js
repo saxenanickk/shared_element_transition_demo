@@ -5,6 +5,8 @@ import FavoritesScreen from "./Containers/FavoritesScreen";
 
 const { width, height } = Dimensions.get("window");
 
+// export default AllSymbolScreen;
+
 export default createBottomTabNavigator(
 	{
 		All: AllSymbolScreen,

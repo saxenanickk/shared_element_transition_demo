@@ -1,10 +1,6 @@
 import { SERVER_BASE_URL } from "../Constants";
 
 class Api {
-	constructor() {
-		console.log("API module is ready!");
-	}
-
 	getAllSymbols() {
 		return new Promise((resolve, reject) => {
 			fetch(`${SERVER_BASE_URL}/ref-data/symbols`, {
@@ -28,8 +24,6 @@ class Api {
 			}`;
 			i++;
 		}
-		console.log(SYMBOL);
-
 		return new Promise((resolve, reject) => {
 			fetch(
 				`${SERVER_BASE_URL}/stock/market/batch?symbols=${SYMBOL}&types=quote`,

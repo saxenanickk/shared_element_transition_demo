@@ -18,7 +18,7 @@ export function* saga(dispatch) {
 function* handleGetSymbols(action) {
 	try {
 		let allSymbols = yield call(Api.getAllSymbols, action.payload);
-		console.log("All Symbols Saga data: ", allSymbols);
+		// console.log("All Symbols Saga data: ", allSymbols);
 		yield put(saveSymbols(allSymbols));
 	} catch (error) {
 		console.log("All Symbols Saga Error: ", error);

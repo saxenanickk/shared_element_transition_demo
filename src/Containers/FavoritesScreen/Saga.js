@@ -33,10 +33,9 @@ export function* saga(dispatch) {
 
 // Handlers (Generator Functions)
 function* handleGetQuote(action) {
-	console.log(action);
 	try {
 		let quote = yield call(Api.getQuote, action.payload);
-		console.log("Get Quote Saga data: ", quote);
+		// console.log("Get Quote Saga data: ", quote);
 		yield put(saveQuote(quote));
 	} catch (error) {
 		console.log("Get Quote Saga Error: ", error);
@@ -46,7 +45,7 @@ function* handleGetQuote(action) {
 function* handleGetNews(action) {
 	try {
 		let news = yield call(Api.getNews, action.payload);
-		console.log("Get News Saga data: ", news);
+		// console.log("Get News Saga data: ", news);
 		yield put(saveNews(news[action.payload.symbol].news));
 	} catch (error) {
 		console.log("Get News Saga Error: ", error);

@@ -20,13 +20,12 @@ import AddToFavoriteButton from "../../Components/AddToFavoriteButton";
 
 const { width, height } = Dimensions.get("window");
 
-class AllSymbolsScreen extends React.Component {
+class AllSymbolsScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
 			allEntities: []
 		};
-		this.allSymbols = [];
 		this.limit = 10;
 	}
 
@@ -43,7 +42,7 @@ class AllSymbolsScreen extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.dispatch(getSymbols());
+		this.props.getSymbols();
 	}
 
 	onPressAddToFavorite = item => {
@@ -53,7 +52,7 @@ class AllSymbolsScreen extends React.Component {
 				canBeAdded = false;
 			}
 		});
-		canBeAdded && this.props.dispatch(addToFavorites(item));
+		canBeAdded && this.props.addToFavorites(item);
 	};
 
 	render() {
@@ -77,14 +76,16 @@ class AllSymbolsScreen extends React.Component {
 					</View>
 				) : (
 					<FlatList
+						removeClippedSubviews
 						data={this.state.allEntities}
 						onEndReached={() => {
 							this.limit = this.limit + 10;
 							this.fillEnitities(this.props.allSymbols, this.limit);
 						}}
+						keyExtractor={(item, index) => index.toString()}
 						renderItem={item => {
 							return (
-								<TouchableOpacity activeOpacity={0.8} key={item.index}>
+								<TouchableOpacity activeOpacity={0.8}>
 									<Animated.View
 										style={{
 											width: width,
@@ -186,9 +187,12 @@ function mapStateToProps(state) {
 	};
 }
 
+const mapDispatchToProps = dispatch => ({
+	getSymbols: () => dispatch(getSymbols()),
+	addToFavorites: item => dispatch(addToFavorites(item))
+});
+
 export default connect(
 	mapStateToProps,
-	null,
-	null,
-	{ withRef: true }
+	mapDispatchToProps
 )(AllSymbolsScreen);
