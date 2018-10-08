@@ -585,7 +585,7 @@ const mapDispatchToProps = dispatch => ({
 	getNews: symbol => dispatch(getNews(symbol)),
 	saveNews: () => dispatch(saveNews([])),
 	removeFromFavorites: item => dispatch(removeFromFavorites(item)),
-	removeFromQuote: symbol => dispatch(removeFromFavorites(symbol))
+	removeFromQuote: symbol => dispatch(removeFromQuote(symbol))
 });
 
 export default connect(

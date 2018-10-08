@@ -20,23 +20,27 @@ import AddToFavoriteButton from "../../Components/AddToFavoriteButton";
 
 const { width, height } = Dimensions.get("window");
 
-class AllSymbolsScreen extends React.PureComponent {
+class AllSymbolsScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			allEntities: []
 		};
 		this.limit = 10;
+		this.oldLimit = 0;
 	}
 
-	fillEnitities = (data, limit) => {
-		let tempData = data.slice(0, limit);
-		this.setState({ allEntities: tempData });
+	fillEnitities = (data) => {
+		let temp = this.state.allEntities
+		temp = temp.concat(data.slice(this.oldLimit, this.limit))
+		this.setState({
+			allEntities: temp
+		});
 	};
 
 	shouldComponentUpdate(props) {
 		if (props.allSymbols.length > 0 && this.props.allSymbols.length === 0) {
-			this.fillEnitities(props.allSymbols, this.limit);
+			this.fillEnitities(props.allSymbols);
 		}
 		return true;
 	}
@@ -71,110 +75,111 @@ class AllSymbolsScreen extends React.PureComponent {
 						{Platform.OS === "android" ? (
 							<ActivityIndicator color={"#ffffff"} size={height / 20} />
 						) : (
-							<ActivityIndicator />
-						)}
+								<ActivityIndicator />
+							)}
 					</View>
 				) : (
-					<FlatList
-						removeClippedSubviews
-						data={this.state.allEntities}
-						onEndReached={() => {
-							this.limit = this.limit + 10;
-							this.fillEnitities(this.props.allSymbols, this.limit);
-						}}
-						keyExtractor={(item, index) => index.toString()}
-						renderItem={item => {
-							return (
-								<TouchableOpacity activeOpacity={0.8}>
-									<Animated.View
-										style={{
-											width: width,
-											padding: width / 20
-										}}
-									>
-										<View
+						<FlatList
+							removeClippedSubviews
+							data={this.state.allEntities}
+							onEndReached={() => {
+								this.oldLimit = this.limit
+								this.limit = this.limit + 10;
+								this.fillEnitities(this.props.allSymbols);
+							}}
+							keyExtractor={(item, index) => index.toString()}
+							renderItem={item => {
+								return (
+									<TouchableOpacity activeOpacity={0.8}>
+										<Animated.View
 											style={{
-												elevation: 5,
-												flex: 1,
-												height: null,
-												width: null,
-												backgroundColor: "#2c2f3f",
-												borderRadius: 5,
-												flexDirection: "row",
-												alignItems: "center",
-												justifyContent: "space-between",
-												padding: width / 30
+												width: width,
+												padding: width / 20
 											}}
 										>
-											<View style={{ flex: 2 }}>
-												<Text
-													style={{
-														fontSize: height / 45,
-														color: "#fbfbfc"
-													}}
-												>
-													{item.item.name}
-												</Text>
-												<Text
-													style={{
-														fontSize: height / 50,
-														fontWeight: "bold",
-														color: "#6c7687"
-													}}
-												>
-													{`${item.item.symbol}`}
-												</Text>
-											</View>
-											<View style={{ flex: 1.5, paddingLeft: width / 25 }}>
-												<View style={{ flexDirection: "row" }}>
+											<View
+												style={{
+													elevation: 5,
+													flex: 1,
+													height: null,
+													width: null,
+													backgroundColor: "#2c2f3f",
+													borderRadius: 5,
+													flexDirection: "row",
+													alignItems: "center",
+													justifyContent: "space-between",
+													padding: width / 30
+												}}
+											>
+												<View style={{ flex: 2 }}>
 													<Text
 														style={{
-															fontSize: height / 55,
-															fontWeight: "bold",
-															color: "#6c7687"
+															fontSize: height / 45,
+															color: "#fbfbfc"
 														}}
 													>
-														{`Type: `}
+														{item.item.name}
 													</Text>
 													<Text
 														style={{
 															fontSize: height / 50,
-															color: "#6c7687"
-														}}
-													>
-														{`${item.item.type.toUpperCase()}`}
-													</Text>
-												</View>
-												<View style={{ flexDirection: "row" }}>
-													<Text
-														style={{
-															fontSize: height / 55,
 															fontWeight: "bold",
 															color: "#6c7687"
 														}}
 													>
-														{`IEX ID:  `}
-													</Text>
-													<Text
-														style={{
-															fontSize: height / 50,
-															color: "#6c7687"
-														}}
-													>
-														{`${item.item.iexId}`}
+														{`${item.item.symbol}`}
 													</Text>
 												</View>
+												<View style={{ flex: 1.5, paddingLeft: width / 25 }}>
+													<View style={{ flexDirection: "row" }}>
+														<Text
+															style={{
+																fontSize: height / 55,
+																fontWeight: "bold",
+																color: "#6c7687"
+															}}
+														>
+															{`Type: `}
+														</Text>
+														<Text
+															style={{
+																fontSize: height / 50,
+																color: "#6c7687"
+															}}
+														>
+															{`${item.item.type.toUpperCase()}`}
+														</Text>
+													</View>
+													<View style={{ flexDirection: "row" }}>
+														<Text
+															style={{
+																fontSize: height / 55,
+																fontWeight: "bold",
+																color: "#6c7687"
+															}}
+														>
+															{`IEX ID:  `}
+														</Text>
+														<Text
+															style={{
+																fontSize: height / 50,
+																color: "#6c7687"
+															}}
+														>
+															{`${item.item.iexId}`}
+														</Text>
+													</View>
+												</View>
+												<AddToFavoriteButton
+													onPress={() => this.onPressAddToFavorite(item.item)}
+												/>
 											</View>
-											<AddToFavoriteButton
-												onPress={() => this.onPressAddToFavorite(item.item)}
-											/>
-										</View>
-									</Animated.View>
-								</TouchableOpacity>
-							);
-						}}
-					/>
-				)}
+										</Animated.View>
+									</TouchableOpacity>
+								);
+							}}
+						/>
+					)}
 			</SafeAreaView>
 		);
 	}
