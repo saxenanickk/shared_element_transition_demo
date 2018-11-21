@@ -12,7 +12,7 @@ var middlewares = [sagaMiddleware];
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-// if (__DEV__) middlewares = [...middlewares, logger];
+if (__DEV__) middlewares = [...middlewares, logger];
 
 const store = createStore(
 	reducer,

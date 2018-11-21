@@ -1,28 +1,38 @@
 import { Dimensions } from "react-native";
-import { createBottomTabNavigator } from "react-navigation";
+import {
+	createBottomTabNavigator,
+	createStackNavigator
+} from "react-navigation";
 import AllSymbolScreen from "./Containers/AllSymbolsScreen";
 import FavoritesScreen from "./Containers/FavoritesScreen";
+import First from "./Containers/First";
+import New from "./Containers/New";
 
 const { width, height } = Dimensions.get("window");
 
 // export default AllSymbolScreen;
 
-export default createBottomTabNavigator(
+export default createStackNavigator(
 	{
+		New: New,
+		First: First,
 		All: AllSymbolScreen,
 		Favorites: FavoritesScreen
 	},
 	{
-		tabBarOptions: {
-			tabStyle: {
-				borderWidth: 0,
-				backgroundColor: "#2c2f3f"
-			},
-			labelStyle: {
-				fontSize: height / 45
-			},
-			activeTintColor: "#ffffff",
-			inactiveTintColor: "#6c7687"
-		}
+		headerMode: "none"
 	}
+	// {
+	// 	tabBarOptions: {
+	// 		tabStyle: {
+	// 			borderWidth: 0,
+	// 			backgroundColor: "#2c2f3f"
+	// 		},
+	// 		labelStyle: {
+	// 			fontSize: height / 45
+	// 		},
+	// 		activeTintColor: "#ffffff",
+	// 		inactiveTintColor: "#6c7687"
+	// 	}
+	// }
 );
