@@ -7,6 +7,7 @@ import AllSymbolScreen from "./Containers/AllSymbolsScreen";
 import FavoritesScreen from "./Containers/FavoritesScreen";
 import First from "./Containers/First";
 import New from "./Containers/New";
+import Test from "./Containers/Test";
 
 const { width, height } = Dimensions.get("window");
 
@@ -14,10 +15,11 @@ const { width, height } = Dimensions.get("window");
 
 export default createStackNavigator(
 	{
-		New: New,
-		First: First,
-		All: AllSymbolScreen,
-		Favorites: FavoritesScreen
+		Test: Test
+		// New: New,
+		// First: First,
+		// All: AllSymbolScreen,
+		// Favorites: FavoritesScreen
 	},
 	{
 		headerMode: "none"

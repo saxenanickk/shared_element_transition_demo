@@ -26,7 +26,6 @@ export default class First extends React.Component {
 		this.state = {
 			allEntities: [],
 			activeCard: null,
-			activeSymbol: null,
 			clicked: false
 		};
 		if (Platform.OS === "android") {
@@ -44,7 +43,7 @@ export default class First extends React.Component {
 		this.animation = new Animated.Value(0);
 	}
 
-	openCard = (index, symbol) => {
+	openCard = index => {
 		this.allCards[index].measure((x, y, width, height, pageX, pageY) => {
 			this.oldPosition.x = pageX;
 			this.oldPosition.y = pageY;
@@ -61,7 +60,7 @@ export default class First extends React.Component {
 				y: height
 			});
 
-			this.setState({ activeCard: index, activeSymbol: symbol }, () => {
+			this.setState({ activeCard: index }, () => {
 				this.viewCard.measure((dx, dy, dWidth, dHeight, dPageX, dPageY) => {
 					Animated.parallel([
 						Animated.timing(this.position.x, {
@@ -113,7 +112,7 @@ export default class First extends React.Component {
 				duration: 300
 			})
 		]).start(() => {
-			this.setState({ activeCard: null, activeSymbol: null, clicked: false });
+			this.setState({ activeCard: null, clicked: false });
 		});
 	};
 
